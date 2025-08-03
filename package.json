@@ -1,0 +1,41 @@
+{
+  "name": "fiap-tech-challenge-02",
+  "version": "1.0.0",
+  "description": "💾 Segundo desafio da pós graduação em desenvolvimento full-stack @FIAP",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lmagueta/fiap-tech-challenge-02.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lmagueta/fiap-tech-challenge-02/issues"
+  },
+  "homepage": "https://github.com/lmagueta/fiap-tech-challenge-02#readme",
+  "dependencies": {
+    "@types/node": "^24.1.0",
+    "dotenv": "^17.2.1",
+    "fastify": "^5.4.0",
+    "tsup": "^8.5.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2",
+    "zod": "^4.0.14"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-promise": "^6.1.1",
+    "prettier": "^3.2.5"
+  }
+}
