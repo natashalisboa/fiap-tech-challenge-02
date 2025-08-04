@@ -4,7 +4,9 @@
   "description": "💾 Segundo desafio da pós graduação em desenvolvimento full-stack @FIAP",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:dev": "tsx watch src/server.ts",
+    "start": "node build/server.js",
+    "build": "tsup src --out-dir build"
   },
   "repository": {
     "type": "git",
@@ -20,9 +22,13 @@
   "dependencies": {
     "@types/node": "^24.1.0",
     "dotenv": "^17.2.1",
+    "express": "^5.1.0",
     "fastify": "^5.4.0",
+    "pg": "^8.16.3",
+    "reflect-metadata": "^0.2.2",
     "tsup": "^8.5.0",
     "tsx": "^4.20.3",
+    "typeorm": "^0.3.25",
     "typescript": "^5.9.2",
     "zod": "^4.0.14"
   },
