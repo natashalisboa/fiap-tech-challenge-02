@@ -5,9 +5,35 @@ import { makeFindAllUsuarioUseCase } from "../../../application/use-cases/factor
 import { makeFindUsuarioUseCase } from "../../../application/use-cases/factory/make-find-usuario-use-case";
 import { makeUpdateUsuarioUseCase } from "../../../application/use-cases/factory/make-update-usuario-use-case";
 import { makeDeleteUsuarioUseCase } from "../../../application/use-cases/factory/make-delete-usuario-use-case";
+import { compare, hash } from "bcryptjs";
+import { makeSigninUseCase } from "../../../application/use-cases/factory/make-signin-use-case";
+import { InvalidCredentialsError } from "../../../application/use-cases/errors/invalid-credentials-error";
 
 
 //TODO: Alterar o uso do Fastify para o uso do Express
+export async function signin(request: FastifyRequest, reply: FastifyReply) {
+    const registerBodySchema = z.object({
+        email: z.string(),
+        senha: z.string()
+    });
+    const { email, senha } = registerBodySchema.parse(request.body);
+
+    const signinUseCase = makeSigninUseCase();
+
+    const usuario = await signinUseCase.handler(email);
+
+    const doestPasswordMatch = await compare(senha, usuario.senha);
+
+    if (!doestPasswordMatch) {
+        throw new InvalidCredentialsError();
+    }
+
+    const token = await reply.jwtSign({ });
+
+    return reply.status(200).send({ token });
+}
+
+
 export async function findAllUsuario(request: FastifyRequest, reply: FastifyReply){
     const registerBodySchema = z.object({
         page: z.coerce.number().default(1),
@@ -51,12 +77,14 @@ export async function createUsuario(request: FastifyRequest, reply: FastifyReply
 
     const { userId, nome, email, senha, cargo } = registerBodySchema.parse(request.body);
 
+    const hashedPassword = await hash(senha, 10);
+    
     const createUsuarioUseCase = makeCreateUsuarioUseCase();
 
     const usuario = await createUsuarioUseCase.handler({
         nome,
         email,
-        senha,
+        senha: hashedPassword,
         cargo,
         dtCriacao: new Date(),
         dtAtualizacao: new Date()

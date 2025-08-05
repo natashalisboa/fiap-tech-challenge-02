@@ -9,7 +9,8 @@ const envSchema = z.object({
     DATABASE_HOST: z.string(),
     DATABASE_NAME: z.string(),
     DATABASE_PASSWORD: z.string(),
-    DATABASE_PORT: z.coerce.number()
+    DATABASE_PORT: z.coerce.number(),
+    JWT_SECRET: z.string()
 
 })
 

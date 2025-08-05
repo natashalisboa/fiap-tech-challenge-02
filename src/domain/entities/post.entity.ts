@@ -8,7 +8,7 @@ import { Usuario } from "./usuario.entity";
 })
 export class Post implements IPost{
     @PrimaryGeneratedColumn('increment', {
-            name:'postId'
+            name:'postid'
         })
     postId: number;
 
@@ -25,22 +25,22 @@ export class Post implements IPost{
     conteudo: string;
 
     @ManyToOne(() => Disciplina)
-    @JoinColumn({ name: 'disciplinaId' })
+    @JoinColumn({ name: 'disciplinaid' })
     disciplinaId: Disciplina;
 
     @ManyToOne(() => Usuario)
-    @JoinColumn({ name: 'userId' })
+    @JoinColumn({ name: 'autorid' })
     autorId: Usuario;
 
     @Column({
-        name: 'dtCriacao',
+        name: 'dtcriacao',
         type: 'timestamp without time zone',
         default: () => 'CURRENT_TIMESTAMP'
     })
     dtCriacao: Date;
 
     @Column({
-        name: 'dtAtualizacao',
+        name: 'dtatualizacao',
         type: 'timestamp without time zone',
         default: () => 'CURRENT_TIMESTAMP'
     })
