@@ -1,7 +1,7 @@
 import { ICargo } from "./cargo.interface";
 
 export interface IUsuario {
-    userId?: String;
+    userId?: number;
     nome: string;
     email: string;
     senha: string;

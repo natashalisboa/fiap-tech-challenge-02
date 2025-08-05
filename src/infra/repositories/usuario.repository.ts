@@ -10,8 +10,30 @@ export class UsuarioRepository implements IUsuarioRepository {
     constructor(){
         this.repository = appDataSource.getRepository(Usuario);
     }
-    
-    create(usuario: IUsuario): Promise<IUsuario> {
+
+    async findAll(page: number, limit: number): Promise<IUsuario[]> {
+        return this.repository.find({
+            skip: (page - 1) * limit,
+            take: limit
+        });
+    }
+
+    async findById(userId: number): Promise<IUsuario | null> {
+        return this.repository.findOne({
+            where: { userId }
+        });
+    }
+
+    async create(usuario: IUsuario): Promise<IUsuario> {
         return this.repository.save(usuario);
     }
+
+    async update(usuario: IUsuario): Promise<IUsuario> {
+        return this.repository.save(usuario);
+    }
+    async delete(id: number): Promise<void> {
+        await this.repository.delete(id);
+    }
+    
+
 }

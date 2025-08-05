@@ -9,7 +9,7 @@ export class Usuario implements IUsuario{
     @PrimaryGeneratedColumn('increment', {
         name:'userid'
     })
-    userId: String;
+    userId: number;
 
     @Column({
         name: 'nome',
