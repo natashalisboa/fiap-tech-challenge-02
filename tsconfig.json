@@ -23,6 +23,7 @@
     "declarationMap": true,
 
     // Stricter Typechecking Options
+    "strictPropertyInitialization": false,
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
 

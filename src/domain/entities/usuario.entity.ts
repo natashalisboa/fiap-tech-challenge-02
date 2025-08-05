@@ -1,28 +1,50 @@
-export class Usuario {
-    userId: number;
+import { Column, Entity, ManyToOne, JoinColumn, PrimaryGeneratedColumn } from "typeorm";
+import { IUsuario } from "./models/usuario.interface";
+import { Cargo } from "./cargo.entity";
+
+@Entity({
+    name: 'usuario'
+})
+export class Usuario implements IUsuario{
+    @PrimaryGeneratedColumn('increment', {
+        name:'userid'
+    })
+    userId: String;
+
+    @Column({
+        name: 'nome',
+        type: 'varchar'
+    })
     nome: string;
-    usuario: string;
+    
+    @Column({
+        name: 'email',
+        type: 'varchar'
+    })
+    email: string;
+    
+    @Column({
+        name: 'senha',
+        type: 'varchar'
+    })
     senha: string;
-    cargo: number;
+    
+ 
+    @ManyToOne(() => Cargo)
+    @JoinColumn({ name: 'cargo' })
+    cargo: Cargo;
+    
+    @Column({
+        name: 'dtcriacao',
+        type: 'date'
+    })
     dtCriacao: Date;
+    
+    @Column({
+        name: 'dtatualizacao',
+        type: 'date'
+    })
     dtAtualizacao: Date;
 
-    constructor(
-        userId: number,
-        nome: string,
-        usuario: string,
-        senha: string,
-        cargo: number,
-        dtCriacao: Date,
-        dtAtualizacao: Date
-    ) {
-        this.userId = userId;
-        this.nome = nome;
-        this.usuario = usuario;
-        this.senha = senha;
-        this.cargo = cargo;
-        this.dtCriacao = dtCriacao;
-        this.dtAtualizacao = dtAtualizacao;
-    }
 }
 

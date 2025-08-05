@@ -1,9 +1,19 @@
-export class Disciplina {
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { IDisciplina } from "./models/disciplina.interface";
+
+@Entity({
+    name: 'disciplina'
+})
+export class Disciplina implements IDisciplina {
+    @PrimaryGeneratedColumn('increment', {
+        name: 'disciplinaId'
+    })
     disciplinaId: number;
+
+    @Column({
+        name: 'nome',
+        type: 'varchar'
+    })
     nome: string;
 
-    constructor(disciplinaId: number, nome: string) {
-        this.disciplinaId = disciplinaId;
-        this.nome = nome;
-    }
 }

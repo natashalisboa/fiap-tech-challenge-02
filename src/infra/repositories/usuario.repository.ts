@@ -1,22 +1,17 @@
-import { create } from "domain";
+import { Repository } from "typeorm";
+import { IUsuario } from "../../domain/entities/models/usuario.interface";
+import { IUsuarioRepository } from "./interfaces/usuario.repository.interface";
 import { Usuario } from "../../domain/entities/usuario.entity";
+import { appDataSource } from "../../lib/typeorm";
 
-export class UsuarioRepository {
-    async findById(userId: number): Promise<Usuario> {
-        return {
-            userId,
-            nome: "Nome Exemplo",
-            usuario: "usuario_exemplo",
-            senha: "senha_exemplo",
-            cargo: 1,
-            dtCriacao: new Date(),
-            dtAtualizacao: new Date()
-        }
+export class UsuarioRepository implements IUsuarioRepository {
+    private repository: Repository<Usuario>;
+
+    constructor(){
+        this.repository = appDataSource.getRepository(Usuario);
     }
-
-    async create(usuario: Usuario): Promise<Usuario> {
-        // Simula a criação de um usuário
-        return usuario;
+    
+    create(usuario: IUsuario): Promise<IUsuario> {
+        return this.repository.save(usuario);
     }
 }
-
