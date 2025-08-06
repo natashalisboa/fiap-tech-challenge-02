@@ -100,11 +100,11 @@ Este repositório contém o back-end do **Portal Múltipla Escolha**, uma plataf
 A aplicação adota uma arquitetura baseada em microsserviços, estruturada no padrão MVC (Model-View-Controller). Essa abordagem favorece a escalabilidade, organização e manutenção do sistema.
 ### Tecnologias
 - **Back-end**: Node.js com Express.js para construção da API RESTful.
-- **Banco de Dados**: PostgreSQL (produção)
+- **Banco de Dados**: PostgreSQL (produção).
 - **Containerização**: Docker para garantir consistência entre os ambientes.
-- **CI/CD**: GitHub Actions para automação de testes e deploy contínuo (node.js.yml).
-- **ORM**: TypeORM
-- **Autenticação**: JWT (JSON Web Tokens)
+- **CI/CD**: GitHub Actions para automação de testes e deploy contínuo.
+- **ORM**: TypeORM.
+- **Autenticação**: JWT (JSON Web Tokens).
 ### **Funcionalidades**
 - Busca de Postagens por palavras-chave.
 - **Usuários:** Cadastro, busca, atualização, autenticação via JWT, exclusão e listagem.
@@ -113,11 +113,11 @@ A aplicação adota uma arquitetura baseada em microsserviços, estruturada no p
 - **`Camada de Apresentação`:** Gerencia as requisições HTTP por meio do Express.js, controlando as rotas da aplicação.
 - **`Camada de Serviço`:** Contém a lógica de negócios, responsável por processar os dados e orquestrar as regras da aplicação.
 - **`Camada de Persistência`:** Utiliza o TypeORM para interações com o banco de dados.
-- **`Banco de Dados`:** Principalmente PostgreSQL (produção).
+- **`Banco de Dados`:** PostgreSQL.
 
 ## ⚙️ **Setup Inicial**
 ### **Pré-requisitos**
-- **Node.js**: versão 18 ou superior;
+- **Node.js**: versão 20 ou superior;
 - **Docker e Docker Compose** (para containerização): Para utilizar a aplicação em contêineres, é necessário ter o Docker instalado. Você pode fazer o download [neste link](https://www.docker.com/get-started). O Docker Compose, utilizado para orquestrar os serviços, normalmente já é incluído na instalação padrão do Docker.
 - **Git**.
 
@@ -184,12 +184,6 @@ A aplicação adota uma arquitetura baseada em microsserviços, estruturada no p
 - **QueryParams**:
   - `page`: Número da página (opcional)
   - `limit`: Quantidade máxima de objetos por página (opcional)
-```json
-{
-    "page": 1,
-    "limit": 1
-}
-```
 
 #### Atualizar Usuário
 - **Método**: PUT
@@ -198,7 +192,7 @@ A aplicação adota uma arquitetura baseada em microsserviços, estruturada no p
 - **Corpo da Requisição**:
 ```json
   {
-    "nome": "teste 2",
+    "nome": "teste update",
     "email": "teste2@gmail.com",
     "senha": "21345",
     "cargo": {
@@ -239,7 +233,6 @@ A aplicação adota uma arquitetura baseada em microsserviços, estruturada no p
     }
 }
 ```
-- **Requer Autenticação**: Sim, o usuário deve ser um administrador.
 
 #### Obter Post por ID
 - **Método**: GET
@@ -284,13 +277,10 @@ A aplicação adota uma arquitetura baseada em microsserviços, estruturada no p
     }
 }
 ```
-- **Requer Autenticação**: Sim, o usuário deve ser um administrador.
-
 #### Deletar Post
 - **Método**: DELETE
 - **Endpoint**: `/posts/:postId`
 - **Parâmetros**: `postId` (ID do post)
-- **Requer Autenticação**: Sim, o usuário deve ser um administrador.
 
 ## ✅ Testes
 Para executar os testes unitários, utilize o comando:
@@ -300,7 +290,7 @@ npm test
 ```
 
 ## **Breve Demonstração**
-[Vídeo](https://www.youtube.com/watch?v=GG_Lx9D9NbI)
+[Vídeo](https://youtu.be/Gn1n7ciEXmo)
 
 ## **Desafios e Conclusão**
 Ao longo do desenvolvimento do projeto, nossa equipe enfrentou diversos desafios técnicos que, embora exigentes, se transformaram em valiosas oportunidades de aprendizado. Como a tecnologia utilizada era nova para nós, foi necessário ir além do conteúdo apresentado em aula, explorando materiais complementares para consolidar os conceitos e aprofundar o entendimento. 
