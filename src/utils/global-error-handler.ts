@@ -1,11 +1,11 @@
-import { FastifyReply, FastifyRequest } from "fastify";
+import { Request, Response } from "express";
 import { ZodError } from "zod";
 
 interface ErrorHandlerMap {
     [key: string]: (
         error: Error | ZodError,
-        request: FastifyRequest,
-        reply: FastifyReply
+        req: Request,
+        res: Response
     ) => void;
 }
 
@@ -30,18 +30,18 @@ export const errorHandlerMap: ErrorHandlerMap = {
 
 export async function globalErrorHandler(
     error: Error | ZodError,
-    request: FastifyRequest,
-    reply: FastifyReply
+    req: Request,
+    res: Response
 ) {
     const errorType = error.name || "UnknownError";
     const handler = errorHandlerMap[errorType];
 
     if (handler) {
-        return handler(error, request, reply);
+        return handler(error, req, res);
     }
 
     console.error("Unhandled error:", error);
-    return reply.status(500).send({
+    return res.status(500).send({
         message: "Internal server error",
         details: error.message
     });

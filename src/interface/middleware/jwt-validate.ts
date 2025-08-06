@@ -1,17 +1,31 @@
-import { FastifyReply, FastifyRequest } from "fastify";
+import { Request, Response, NextFunction } from "express";
+import jwt from 'jsonwebtoken';
+import { env } from "../../env";
 
-export async function jwtValidate(request: FastifyRequest, reply: FastifyReply){
-try{
+const routeFreeList = ['POST-/usuario', 'POST-/usuario/signin'];
 
-    const routeFreeList = ['POST-/usuario', 'POST-/usuario/signin'];
-    const validateRoute = `${request.method}-${request.routeOptions.url}`;
+export function jwtValidate(req: Request, res: Response, next: NextFunction) {
+try {
+    const validateRoute = `${req.method}-${req.originalUrl.split('?')[0]}`;
+    if (routeFreeList.includes(validateRoute)) return next();
 
-    if(routeFreeList.includes(validateRoute)) return;
-    
-    await request.jwtVerify();
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).send({ message: 'unauthorized' });
+    }
 
-} catch (error){
-    reply.status(401).send({message: 'unauthorized'});
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) {
+      return res.status(401).send({ message: 'unauthorized' });
+    }
+
+    try {
+      jwt.verify(token, env.JWT_SECRET as string);
+      next();
+    } catch (error) {
+      return res.status(401).send({ message: 'unauthorized' });
+    }
+  } catch (error) {
+    res.status(401).send({ message: 'unauthorized' });
+  }
 }
-
-} 

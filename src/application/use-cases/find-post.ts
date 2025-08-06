@@ -3,13 +3,13 @@ import { IPostRepository } from "../../infra/repositories/interfaces/post.reposi
 export class FindPostUseCase {
     constructor(private postRepository: IPostRepository) {}
 
-    async handler(id: number){
+    async handler(postId: number){
 
-        const post = await this.postRepository.findById(id);
+        const post = await this.postRepository.findById(postId);
         
         if (!post) throw new Error("Post não encontrado");
 
-        return this.postRepository.findById(id);
+        return this.postRepository.findById(postId);
     }
 
 }

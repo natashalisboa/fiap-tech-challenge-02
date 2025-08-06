@@ -1,4 +1,3 @@
-import { th } from "zod/v4/locales/index.cjs";
 import { IUsuarioRepository } from "../../infra/repositories/interfaces/usuario.repository.interface";
 
 export class FindUsuarioUseCase {

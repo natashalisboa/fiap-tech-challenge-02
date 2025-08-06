@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { Like, Repository } from "typeorm";
 import { IPostRepository } from "./interfaces/post.repository.interface";
 import { Post } from "../../domain/entities/post.entity";
 import { appDataSource } from "../../lib/typeorm";
@@ -24,9 +24,13 @@ export class PostRepository implements IPostRepository {
         });
     }
 
-    async findByTituloOrConteudo(search: string): Promise<IPost | null> {
-        //TODO: Implementar a busca por título ou conteúdo
-        throw new Error("Method not implemented.");
+    async findByTituloOrConteudo(search: string): Promise<IPost[] | null> {
+        return this.repository.find({
+            where: [
+                { titulo: Like(`%${search}%`) },
+                { conteudo: Like(`%${search}%`) }
+            ]
+        });
     }
 
     async create(post: IPost): Promise<IPost> {

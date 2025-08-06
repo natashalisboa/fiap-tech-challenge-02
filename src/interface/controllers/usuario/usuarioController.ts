@@ -1,4 +1,4 @@
-import { FastifyReply, FastifyRequest } from "fastify";
+import { Request, Response } from "express";
 import { z } from "zod";
 import { makeCreateUsuarioUseCase } from "../../../application/use-cases/factory/make-create-usuario-use-case";
 import { makeFindAllUsuarioUseCase } from "../../../application/use-cases/factory/make-find-all-usuario-use-case";
@@ -8,62 +8,73 @@ import { makeDeleteUsuarioUseCase } from "../../../application/use-cases/factory
 import { compare, hash } from "bcryptjs";
 import { makeSigninUseCase } from "../../../application/use-cases/factory/make-signin-use-case";
 import { InvalidCredentialsError } from "../../../application/use-cases/errors/invalid-credentials-error";
+import jwt from "jsonwebtoken";
+import { env } from "../../../env";
 
+export async function signin(req: Request, res: Response) {
+    try {
+        const registerBodySchema = z.object({
+            email: z.string(),
+            senha: z.string()
+        });
+        const { email, senha } = registerBodySchema.parse(req.body);
 
-//TODO: Alterar o uso do Fastify para o uso do Express
-export async function signin(request: FastifyRequest, reply: FastifyReply) {
-    const registerBodySchema = z.object({
-        email: z.string(),
-        senha: z.string()
-    });
-    const { email, senha } = registerBodySchema.parse(request.body);
+        const signinUseCase = makeSigninUseCase();
 
-    const signinUseCase = makeSigninUseCase();
+        const usuario = await signinUseCase.handler(email);
 
-    const usuario = await signinUseCase.handler(email);
+        const doestPasswordMatch = await compare(senha, usuario.senha);
 
-    const doestPasswordMatch = await compare(senha, usuario.senha);
+        if (!doestPasswordMatch) {
+            throw new InvalidCredentialsError();
+        }
 
-    if (!doestPasswordMatch) {
-        throw new InvalidCredentialsError();
+        const token = jwt.sign(
+        { userId: usuario.userId, email: usuario.email },
+        env.JWT_SECRET as string,
+        { expiresIn: "10m" }
+        );
+
+        return res.status(200).json({ token });
+    } catch (error) {
+        if (error instanceof InvalidCredentialsError) {
+        return res.status(401).json({ message: "Invalid credentials" });
     }
-
-    const token = await reply.jwtSign({ });
-
-    return reply.status(200).send({ token });
+    return res.status(400).json({ message: "Erro ao autenticar", error: error instanceof Error ? error.message : error });
+  }
 }
 
 
-export async function findAllUsuario(request: FastifyRequest, reply: FastifyReply){
+export async function findAllUsuario(req: Request, res: Response) {
     const registerBodySchema = z.object({
         page: z.coerce.number().default(1),
         limit: z.coerce.number().default(10)
     });
 
-    const { page, limit } = registerBodySchema.parse(request.query);
+    const { page, limit } = registerBodySchema.parse(req.query);
 
     const findAllUsuarioUseCase = makeFindAllUsuarioUseCase();
 
     const usuarios = await findAllUsuarioUseCase.handler(page, limit);
     
-    return reply.status(200).send(usuarios);
+    return res.status(200).send(usuarios);
 }
 
-export async function findUsuario(request: FastifyRequest, reply: FastifyReply){
+export async function findUsuario(req: Request, res: Response) {
     const registerParamsSchema = z.object({
         userId: z.coerce.number()
     });
 
-    const { userId } = registerParamsSchema.parse(request.params);
+    const { userId } = registerParamsSchema.parse(req.params);
 
     const findUsuarioUseCase = makeFindUsuarioUseCase();
 
     const usuario = await findUsuarioUseCase.handler(userId);
 
-    return reply.status(200).send(usuario);
+    return res.status(200).send(usuario);
 }
 
-export async function createUsuario(request: FastifyRequest, reply: FastifyReply){
+export async function createUsuario(req: Request, res: Response) {
     const registerBodySchema = z.object({
         userId: z.string().optional(),
         nome: z.string(),
@@ -75,7 +86,7 @@ export async function createUsuario(request: FastifyRequest, reply: FastifyReply
         })
     });
 
-    const { userId, nome, email, senha, cargo } = registerBodySchema.parse(request.body);
+    const { userId, nome, email, senha, cargo } = registerBodySchema.parse(req.body);
 
     const hashedPassword = await hash(senha, 10);
     
@@ -90,15 +101,15 @@ export async function createUsuario(request: FastifyRequest, reply: FastifyReply
         dtAtualizacao: new Date()
     });
     
-    return reply.status(201).send(usuario);
+    return res.status(201).send(usuario);
 }
 
-export async function updateUsuario(request: FastifyRequest, reply: FastifyReply){
+export async function updateUsuario(req: Request, res: Response) {
     const registerParamsSchema = z.object({
         userId: z.coerce.number()
     });
 
-    const { userId } = registerParamsSchema.parse(request.params);
+    const { userId } = registerParamsSchema.parse(req.params);
     
     const registerBodySchema = z.object({
         nome: z.string(),
@@ -110,7 +121,7 @@ export async function updateUsuario(request: FastifyRequest, reply: FastifyReply
         })
     });
 
-    const { nome, email, senha, cargo } = registerBodySchema.parse(request.body);
+    const { nome, email, senha, cargo } = registerBodySchema.parse(req.body);
 
     const updateUsuarioUseCase = makeUpdateUsuarioUseCase();
     const usuario = await updateUsuarioUseCase.handler({
@@ -123,20 +134,20 @@ export async function updateUsuario(request: FastifyRequest, reply: FastifyReply
     });
 
 
-    return reply.status(200).send(usuario);
+    return res.status(200).send(usuario);
 }
 
 
-export async function deleteUsuario(request: FastifyRequest, reply: FastifyReply){
+export async function deleteUsuario(req: Request, res: Response) {
     const registerParamsSchema = z.object({
         userId: z.coerce.number()
     });
 
-    const { userId } = registerParamsSchema.parse(request.params);
+    const { userId } = registerParamsSchema.parse(req.params);
 
     const deleteUsuarioUseCase = makeDeleteUsuarioUseCase();
 
     await deleteUsuarioUseCase.handler(userId);
 
-    return reply.status(204).send();
+    return res.status(204).send();
 }

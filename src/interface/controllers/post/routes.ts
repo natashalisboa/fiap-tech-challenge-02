@@ -1,13 +1,13 @@
+import { Router } from "express";
+import { createPost, deletePost, findAllPost, findPost, updatePost, searchPost } from "./postController";
 
-import { FastifyInstance } from "fastify";
-import { createPost, deletePost, findAllPost, findPost, updatePost } from "./postController";
+const router = Router();
 
-//TODO: Alterar o uso do Fastify para o uso do Express
+router.get('/', findAllPost);
+router.get('/:postId', findPost);
+router.get('/search/:search', searchPost);
+router.post('/', createPost);
+router.put('/:postId', updatePost);
+router.delete('/:postId', deletePost);
 
-export async function postRoutes(app: FastifyInstance) {
-    app.get('/posts', findAllPost);
-    app.get('/posts/:postId', findPost);
-    app.post('/posts', createPost);
-    app.put('/posts/:postId', updatePost);
-    app.delete('/posts/:postId', deletePost);
-}
+export { router as postRoutes };
