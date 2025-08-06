@@ -1,0 +1,24 @@
+name: Build and Push Docker Image MultiplaEscolha
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+      steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build and push Docker image
+        run: |
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+          docker build -t $DOCKER_USERNAME/multiplaescolha:latest --build-arg DATABASE_HOST=localhost --build-arg DATABASE_USER=${{ secrets.DATABASE_USER }} --build-arg DATABASE_NAME=${{ secrets.DATABASE_NAME }} --build-arg DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} --build-arg DATABASE_PORT=${{ secrets.DATABASE_PORT }} --build-arg="JWT_SECRET=DEFAULT"
+          docker push $DOCKER_USERNAME/multiplaescolha:latest
