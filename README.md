@@ -297,3 +297,4 @@ Ao longo do desenvolvimento do projeto, nossa equipe enfrentou diversos desafios
 Um dos principais obstáculos foi estruturar a aplicação de forma escalável e de fácil manutenção — algo essencial para garantir a longevidade e evolução do projeto.
 Nesta segunda fase do desafio, conseguimos aplicar de maneira prática os conhecimentos adquiridos, com destaque para o desenvolvimento de APIs, implementação de autenticação, testes unitários e adoção de boas práticas de programação.
 Estamos orgulhosos dos avanços conquistados até aqui. A experiência foi bastante hands-on, e seguimos motivados para continuar aprimorando o **Portal Múltipla Escolha** nas próximas etapas do projeto.
+<p><img src="/assets/gerar_certificado_fase_2.png"></p>
