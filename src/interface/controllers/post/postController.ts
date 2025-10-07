@@ -55,11 +55,11 @@ export async function createPost(req: Request, res: Response) {
         postId: z.string().optional(),
         titulo: z.string(),
         conteudo: z.string(),
-        disciplinaId: z.object({
+        disciplina: z.object({
             disciplinaId: z.coerce.number(),
             nome: z.string()
         }),
-        autorId: z.object({
+        autor: z.object({
             userId: z.coerce.number(),
             nome: z.string(),
             email: z.string(), 
@@ -71,17 +71,18 @@ export async function createPost(req: Request, res: Response) {
         })
     });
 
-    const { postId, titulo, conteudo, disciplinaId, autorId } = registerBodySchema.parse(req.body);
+    const { postId, titulo, conteudo, disciplina, autor } = registerBodySchema.parse(req.body);
     
     const createPostUseCase = makeCreatePostUseCase();
 
     const post = await createPostUseCase.handler({
         titulo,
         conteudo,
-        disciplinaId,
-        autorId,
+        disciplina,
+        autor,
         dtCriacao: new Date(),
-        dtAtualizacao: new Date()
+        dtAtualizacao: new Date(),
+        comentarios: []
     });
     
     return res.status(201).send(post);
@@ -97,11 +98,11 @@ export async function updatePost(req: Request, res: Response) {
     const registerBodySchema = z.object({
         titulo: z.string(),
         conteudo: z.string(),
-        disciplinaId: z.object({
+        disciplina: z.object({
             disciplinaId: z.coerce.number(),
             nome: z.string()
         }),
-        autorId: z.object({
+        autor: z.object({
             userId: z.coerce.number(),
             nome: z.string(),
             email: z.string(), 
@@ -110,10 +111,27 @@ export async function updatePost(req: Request, res: Response) {
                 cargoId: z.coerce.number(),
                 tipo: z.string()
             })
+        }),
+        comentarios: z.array(z.object({
+            comentarioId: z.coerce.number().optional(),
+            post: z.object({ postId: z.coerce.number() }),
+            conteudo: z.string(),
+            dtCriacao: z.date(),
+            dtAtualizacao: z.date(),
+            autor: z.object({
+                userId: z.coerce.number(),
+                nome: z.string(),
+                email: z.string(), 
+                senha: z.string(), 
+                cargo: z.object({
+                    cargoId: z.coerce.number(),
+                    tipo: z.string()
+                })
         })
+        }))
     });
 
-    const { titulo, conteudo, disciplinaId, autorId } = registerBodySchema.parse(req.body);
+    const { titulo, conteudo, disciplina, autor, comentarios } = registerBodySchema.parse(req.body);
 
     const updatePostUseCase = makeUpdatePostUseCase();
 
@@ -121,11 +139,28 @@ export async function updatePost(req: Request, res: Response) {
         postId,
         titulo,
         conteudo,
-        disciplinaId,
-        autorId,
+        disciplina,
+        autor,
         dtAtualizacao: new Date(),
-        dtCriacao: new Date()
-    });
+        dtCriacao: new Date(),
+        comentarios: (comentarios || []).map(comentario => {
+        const { comentarioId, ...rest } = comentario;
+        return {
+            ...rest,
+            ...(comentarioId !== undefined ? { comentarioId } : {}),
+            post: {
+                postId,
+                titulo,
+                conteudo,
+                disciplina,
+                autor,
+                dtCriacao: new Date(),
+                dtAtualizacao: new Date(),
+                comentarios: []
+            }
+        };
+    })
+});
 
 
     return res.status(200).send(post);

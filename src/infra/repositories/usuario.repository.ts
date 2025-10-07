@@ -26,7 +26,8 @@ export class UsuarioRepository implements IUsuarioRepository {
 
     async findByEmail(email: string): Promise<IUsuario | null> {
         return this.repository.findOne({
-            where: { email }
+            where: { email },
+        relations: ['cargo']
         });
     }
 

@@ -25,6 +25,8 @@ export async function signin(req: Request, res: Response) {
 
         const doestPasswordMatch = await compare(senha, usuario.senha);
 
+        const adminPermission = usuario.cargo.cargoId === 1;
+
         if (!doestPasswordMatch) {
             throw new InvalidCredentialsError();
         }
@@ -35,7 +37,7 @@ export async function signin(req: Request, res: Response) {
         { expiresIn: "10m" }
         );
 
-        return res.status(200).json({ token });
+        return res.status(200).json({ token, adminPermission });
     } catch (error) {
         if (error instanceof InvalidCredentialsError) {
         return res.status(401).json({ message: "Invalid credentials" });

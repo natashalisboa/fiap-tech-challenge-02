@@ -1,7 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { IPost } from "./models/post.interface";
 import { Disciplina } from "./disciplina.entity";
 import { Usuario } from "./usuario.entity";
+import { Comentario } from "./comentario.entity";
 
 @Entity({
     name: 'post'
@@ -26,11 +27,14 @@ export class Post implements IPost{
 
     @ManyToOne(() => Disciplina)
     @JoinColumn({ name: 'disciplinaid' })
-    disciplinaId: Disciplina;
+    disciplina: Disciplina;
 
     @ManyToOne(() => Usuario)
     @JoinColumn({ name: 'autorid' })
-    autorId: Usuario;
+    autor: Usuario;
+
+    @OneToMany(() => Comentario, comentario => comentario.post)
+    comentarios: Comentario[];
 
     @Column({
         name: 'dtcriacao',

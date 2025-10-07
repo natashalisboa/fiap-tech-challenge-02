@@ -5,7 +5,7 @@ export interface IUsuario {
     nome: string;
     email: string;
     senha: string;
-    cargo: ICargo; // 1 - Administrador, 2 - Professor, 3 - Aluno
+    cargo: ICargo; // 1 - Professor, 2 - Aluno, 3 - Admin
     dtCriacao?: Date;
     dtAtualizacao?: Date;
 }

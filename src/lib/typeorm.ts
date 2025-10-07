@@ -6,12 +6,16 @@ import { app } from "../app";
 export const appDataSource = new DataSource({
     type: "postgres",
     host: env.DATABASE_HOST,
-    port: env.DATABASE_PORT,
+    port: Number(env.DATABASE_PORT),
     username: env.DATABASE_USER,
     password: env.DATABASE_PASSWORD,
     database: env.DATABASE_NAME,
-    entities: ['src/domain/entities/*.ts'],
-    logging: env.NODE_ENV === 'development',
+    entities: [
+        process.env.NODE_ENV === 'production'
+            ? 'build/domain/entities/*.js'
+            : 'src/domain/entities/*.ts'
+    ],
+    logging: process.env.NODE_ENV === 'development',
 });
 
 appDataSource.initialize().then(() => {

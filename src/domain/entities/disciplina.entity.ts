@@ -6,7 +6,7 @@ import { IDisciplina } from "./models/disciplina.interface";
 })
 export class Disciplina implements IDisciplina {
     @PrimaryGeneratedColumn('increment', {
-        name: 'disciplinaId'
+        name: 'disciplinaid'
     })
     disciplinaId: number;
 

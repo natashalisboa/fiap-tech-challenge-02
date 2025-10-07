@@ -6,7 +6,7 @@ import { ICargo } from "./models/cargo.interface";
 })
 export class Cargo implements ICargo {
     @PrimaryGeneratedColumn('increment', {
-        name: 'cargoId'
+        name: 'cargoid'
     })
     cargoId: number;
 

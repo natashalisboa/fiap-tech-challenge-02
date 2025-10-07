@@ -14,13 +14,15 @@ export class PostRepository implements IPostRepository {
     async findAll(page: number, limit: number): Promise<IPost[]> {
         return this.repository.find({
             skip: (page - 1) * limit,
-            take: limit
+            take: limit,
+            relations: ['disciplina', 'autor', 'comentarios' ]
         });
     }
 
     async findById(postId: number): Promise<IPost | null> {
         return this.repository.findOne({
-            where: { postId }
+            where: { postId },
+            relations: ['disciplina', 'autor', 'comentarios' ]
         });
     }
 
@@ -29,7 +31,8 @@ export class PostRepository implements IPostRepository {
             where: [
                 { titulo: Like(`%${search}%`) },
                 { conteudo: Like(`%${search}%`) }
-            ]
+            ],
+            relations: ['disciplina', 'autor', 'comentarios' ]
         });
     }
 
